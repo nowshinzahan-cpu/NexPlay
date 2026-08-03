@@ -1,0 +1,37 @@
+{
+  "name": "nexplay",
+  "version": "1.0.0",
+  "description": "NexPlay - Entertainment Discovery, Branding & Marketing Platform",
+  "private": true,
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../frontend && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:frontend\"",
+    "seed": "cd server && node database/seed.js",
+    "seed:content": "cd server && node database/seedContent.js",
+    "seed:badges": "cd server && node database/seedBadges.js",
+    "seed:new": "cd server && node database/seedNewModels.js",
+    "seed:all": "npm run seed && npm run seed:content && npm run seed:badges && npm run seed:new",
+    "start": "cd server && npm start",
+    "test": "cd server && npm test",
+    "test:server": "cd server && node --test tests/*.test.js",
+    "build": "cd frontend && npx vite build",
+    "lint:server": "cd server && npx eslint . --ext .js",
+    "clean": "rm -rf node_modules server/node_modules frontend/node_modules"
+  },
+  "keywords": [
+    "nexplay",
+    "entertainment",
+    "discovery",
+    "mern",
+    "javascript"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "mongoose": "^9.8.0"
+  }
+}

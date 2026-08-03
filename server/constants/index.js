@@ -1,0 +1,74 @@
+const ROLES = {
+  USER: 'user',
+  COMPANY: 'company',
+  ADMIN: 'admin'
+};
+
+const VERIFICATION_STATUS = {
+  PENDING: 'pending',
+  VERIFIED: 'verified',
+  REJECTED: 'rejected'
+};
+
+const NOTIFICATION_TYPES = {
+  VERIFICATION: 'verification',
+  SYSTEM: 'system',
+  PROMOTION: 'promotion'
+};
+
+const VERIFICATION_PURPOSE = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+};
+
+const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  UNPROCESSABLE: 422,
+  TOO_MANY: 429,
+  SERVER_ERROR: 500
+};
+
+const PASSWORD_RULES = {
+  MIN_LENGTH: 8,
+  REGEX: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/
+};
+
+const OTP_CONFIG = {
+  LENGTH: 6,
+  EXPIRY_MINUTES: 10
+};
+
+const TOKEN_CONFIG = {
+  RESET_EXPIRY_HOURS: 1
+};
+
+const PAGINATION = {
+  DEFAULT_PAGE: 1,
+  DEFAULT_LIMIT: 10,
+  MAX_LIMIT: 100
+};
+
+const USERNAME_RULES = {
+  MIN_LENGTH: 3,
+  MAX_LENGTH: 30,
+  REGEX: /^[a-zA-Z0-9_]+$/
+};
+
+module.exports = {
+  ROLES,
+  VERIFICATION_STATUS,
+  NOTIFICATION_TYPES,
+  VERIFICATION_PURPOSE,
+  HTTP_STATUS,
+  PASSWORD_RULES,
+  OTP_CONFIG,
+  TOKEN_CONFIG,
+  PAGINATION,
+  USERNAME_RULES
+};

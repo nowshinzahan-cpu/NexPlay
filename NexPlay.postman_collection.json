@@ -1,0 +1,1735 @@
+{
+  "info": {
+    "name": "NexPlay",
+    "description": "NexPlay API - Complete Collection. Covers Authentication, Company Management, Admin Dashboard, Match Center, Streaming Platforms, Favorites & Notifications, Ratings & Reviews, Discussion Forum, Gamification, and Moderation.\n\n## Getting Started\n1. Run all 4 seed scripts: `npm run seed && npm run seed:content && npm run seed:badges && npm run seed:new`\n2. Start the server: `npm run dev`\n3. Run the auth endpoints in order (Login User, Login Company, Login Admin) to set tokens\n4. Variables are auto-set via test scripts - no manual copying needed",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "nexplay"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "companyToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "resetToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "matchId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "discussionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "commentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "broadcasterId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "notificationId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reportId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "itemId",
+      "value": "item123",
+      "type": "string"
+    },
+    {
+      "key": "competitionId",
+      "value": "La Liga",
+      "type": "string"
+    },
+    {
+      "key": "companyId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "description": "Authentication, registration, and token management endpoints",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Response has success true', function () { pm.expect(pm.response.json().success).to.be.true; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            }
+          }
+        },
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Response has success true', function () { pm.expect(pm.response.json().success).to.be.true; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Arif Rahman\",\n  \"username\": \"arif.rahman\",\n  \"email\": \"arif.rahman@gmail.com\",\n  \"password\": \"NexPlay@User#2025\",\n  \"confirmPassword\": \"NexPlay@User#2025\",\n  \"role\": \"user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Company",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "pm.test('Response has success true', function () { pm.expect(pm.response.json().success).to.be.true; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Dhaka Digital Media\",\n  \"username\": \"dhakadigitalmedia\",\n  \"email\": \"info@dhakadigitalmedia.com\",\n  \"password\": \"NexPlay@Company#2025\",\n  \"confirmPassword\": \"NexPlay@Company#2025\",\n  \"role\": \"company\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login success', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', json.data.accessToken);",
+                  "  console.log('accessToken set successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailOrUsername\": \"arif.rahman@gmail.com\",\n  \"password\": \"NexPlay@User#2025\",\n  \"rememberMe\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Company",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Company login success', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('companyToken', json.data.accessToken);",
+                  "  console.log('companyToken set successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailOrUsername\": \"info@dhakadigitalmedia.com\",\n  \"password\": \"NexPlay@Company#2025\",\n  \"rememberMe\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin login success', function () { pm.response.to.have.status(200); });",
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data.accessToken) {",
+                  "  pm.collectionVariables.set('adminToken', json.data.accessToken);",
+                  "  console.log('adminToken set successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailOrUsername\": \"tanvir.ahmed@nexplay.com\",\n  \"password\": \"NexPlay@Admin#2025\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('User data returned', function () { pm.expect(pm.response.json().data.user).to.have.property('email'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{accessToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔑 Password Reset",
+      "description": "Password reset flow: forgot password → verify OTP → reset password",
+      "item": [
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"arif.rahman@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"arif.rahman@gmail.com\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "verify-otp"]
+            }
+          }
+        },
+        {
+          "name": "Resend OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"arif.rahman@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/resend-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "resend-otp"]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resetToken\": \"{{resetToken}}\",\n  \"newPassword\": \"NexPlay@User#2025\",\n  \"confirmPassword\": \"NexPlay@User#2025\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏢 Company",
+      "description": "Company profile management endpoints",
+      "item": [
+        {
+          "name": "Get Company Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{companyToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/company/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "company", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Company Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{companyToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"Dhaka Digital Media Updated\",\n  \"description\": \"We are a leading entertainment company in Bangladesh.\",\n  \"industry\": \"Streaming\",\n  \"website\": \"https://dhakadigitalmedia.com\",\n  \"location\": \"Dhaka, Bangladesh\",\n  \"foundedYear\": 2020\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/company/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "company", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Get Company Advertisements",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{companyToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/company/advertisements?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "company", "advertisements"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Company Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{companyToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/company/campaigns?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "company", "campaigns"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚽ Match Center",
+      "description": "Live Scores & Match Center endpoints (Sprint 3 - Module 1)",
+      "item": [
+        {
+          "name": "GET Live Matches",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "// Auto-capture first live match ID",
+                  "if (json.success && json.data && json.data.length > 0 && json.data[0]._id) {",
+                  "  if (!pm.collectionVariables.get('matchId')) {",
+                  "    pm.collectionVariables.set('matchId', json.data[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/live",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "live"]
+            }
+          }
+        },
+        {
+          "name": "GET Today's Matches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/today",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "today"]
+            }
+          }
+        },
+        {
+          "name": "GET Upcoming Matches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/upcoming?page=1&limit=10&sportType=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "upcoming"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sportType", "value": "", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Match by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('matchId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/{{matchId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "{{matchId}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Create Match (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('matchId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"homeTeam\": \"Inter Milan\",\n  \"awayTeam\": \"AC Milan\",\n  \"competition\": \"Serie A\",\n  \"sportType\": \"Football\",\n  \"kickoffTime\": \"2026-08-15T20:00:00Z\",\n  \"venue\": \"San Siro\",\n  \"status\": \"scheduled\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/matches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Match (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"homeScore\": 3,\n  \"awayScore\": 1,\n  \"status\": \"live\",\n  \"minute\": 45\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/{{matchId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "{{matchId}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Add Match Event (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"goal\",\n  \"minute\": 34,\n  \"team\": \"home\",\n  \"playerName\": \"L. Martinez\",\n  \"description\": \"Header from corner kick\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/{{matchId}}/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "{{matchId}}", "events"]
+            }
+          }
+        },
+        {
+          "name": "GET Standings by Competition",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/standings/{{competitionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "standings", "{{competitionId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📺 Streaming Platforms",
+      "description": "Sports Streaming Platform endpoints (Sprint 3 - Module 2)",
+      "item": [
+        {
+          "name": "GET Match Streams",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/matches/{{matchId}}/streams?region=US",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "matches", "{{matchId}}", "streams"],
+              "query": [{ "key": "region", "value": "US" }]
+            }
+          }
+        },
+        {
+          "name": "GET All Broadcasters (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/broadcasters",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "broadcasters"]
+            }
+          }
+        },
+        {
+          "name": "POST Create Broadcaster (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('broadcasterId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DAZN\",\n  \"logoUrl\": \"https://example.com/dazn-logo.png\",\n  \"website\": \"https://www.dazn.com\",\n  \"regions\": [\"US\", \"UK\", \"Canada\"],\n  \"isOfficial\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/broadcasters",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "broadcasters"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Broadcaster (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DAZN Updated\",\n  \"regions\": [\"US\", \"UK\", \"Canada\", \"Germany\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/broadcasters/{{broadcasterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "broadcasters", "{{broadcasterId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Broadcaster (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/broadcasters/{{broadcasterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "broadcasters", "{{broadcasterId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⭐ Favorites & Notifications",
+      "description": "Favorites, Notification Preferences, and Notifications (Sprint 3 - Module 3 / Sprint 4 - Module 6)",
+      "item": [
+        {
+          "name": "POST Add Favorite",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('favoriteId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"team\",\n  \"refId\": \"Barcelona\",\n  \"refName\": \"Barcelona\",\n  \"sportType\": \"Football\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "GET Favorites",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/favorites?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favorites"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE Remove Favorite",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"team\",\n  \"refId\": \"Barcelona\",\n  \"refName\": \"Barcelona\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "GET Notification Preferences",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notification-preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notification-preferences"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Notification Preferences",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"matchReminders\": true,\n  \"goalAlerts\": true,\n  \"tournamentAnnouncements\": false,\n  \"reminderMinutesBefore\": 15\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/notification-preferences",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notification-preferences"]
+            }
+          }
+        },
+        {
+          "name": "GET Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "// Auto-capture first notification ID for PATCH/DELETE operations",
+                  "if (json.success && json.data) {",
+                  "  var notifications = json.data.data || json.data; ",
+                  "  if (notifications.length > 0 && notifications[0]._id) {",
+                  "    pm.collectionVariables.set('notificationId', notifications[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications?page=1&limit=20&read=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "read", "value": "false" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Unread Notification Count",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "unread-count"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/{{notificationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "{{notificationId}}", "read"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "read-all"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/{{notificationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "{{notificationId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "⭐ Ratings & Reviews",
+      "description": "Ratings & Reviews endpoints (Sprint 4 - Module 4)",
+      "item": [
+        {
+          "name": "POST Create Review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('reviewId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"{{itemId}}\",\n  \"itemType\": \"Movie\",\n  \"rating\": 4,\n  \"body\": \"Great movie! Really enjoyed the cinematography and storyline.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "GET Item Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/reviews?page=1&limit=10&sort=recent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}", "reviews"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sort", "value": "recent" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Rating Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/items/{{itemId}}/rating-summary?itemType=Movie",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "items", "{{itemId}}", "rating-summary"],
+              "query": [{ "key": "itemType", "value": "Movie" }]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"body\": \"Updated review - even better on second watch!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Mark Review as Helpful",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/helpful",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "helpful"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 Discussion Forum",
+      "description": "Discussion Forum endpoints with comments, likes, reports, and moderation (Sprint 4 - Module 5)",
+      "item": [
+        {
+          "name": "GET Discussions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions?page=1&limit=20&sort=recent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "sort", "value": "recent" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Create Discussion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('discussionId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"What are your predictions for the Champions League?\",\n  \"body\": \"I think Real Madrid will win again this year. What do you all think?\",\n  \"tags\": [\"sports\", \"football\", \"champions-league\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions"]
+            }
+          }
+        },
+        {
+          "name": "GET Discussion by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions/{{discussionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions", "{{discussionId}}"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Discussion",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated: Champions League Predictions 2026\",\n  \"body\": \"Updated my predictions after the group stage draw!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions/{{discussionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions", "{{discussionId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Delete Discussion",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions/{{discussionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions", "{{discussionId}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Add Comment to Discussion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('commentId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Great discussion! I think Barcelona has a good chance this year.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions/{{discussionId}}/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions", "{{discussionId}}", "comments"]
+            }
+          }
+        },
+        {
+          "name": "GET Discussion Comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/discussions/{{discussionId}}/comments?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "discussions", "{{discussionId}}", "comments"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST Like Comment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/comments/{{commentId}}/like",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comments", "{{commentId}}", "like"]
+            }
+          }
+        },
+        {
+          "name": "PUT Update Comment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Edited: Actually, I think both teams have a chance this season!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comments", "{{commentId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/comments/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comments", "{{commentId}}"]
+            }
+          }
+        },
+        {
+          "name": "POST Report Content",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.success && json.data && json.data._id) {",
+                  "  pm.collectionVariables.set('reportId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetType\": \"discussion\",\n  \"targetId\": \"{{discussionId}}\",\n  \"reason\": \"spam\",\n  \"description\": \"This discussion contains spam content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reports",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏆 Gamification",
+      "description": "Gamification & Notification Centre endpoints (Sprint 4 - Module 6)",
+      "item": [
+        {
+          "name": "GET Leaderboard (All Time)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/leaderboard?range=allTime&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leaderboard"],
+              "query": [
+                { "key": "range", "value": "allTime" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Leaderboard (Weekly)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/leaderboard?range=weekly&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leaderboard"],
+              "query": [
+                { "key": "range", "value": "weekly" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Leaderboard (Monthly)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/leaderboard?range=monthly&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leaderboard"],
+              "query": [
+                { "key": "range", "value": "monthly" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET User Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "stats"]
+            }
+          }
+        },
+        {
+          "name": "GET Badges",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/badges",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "badges"]
+            }
+          }
+        },
+        {
+          "name": "GET Points History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/points-history?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "points-history"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Moderation (Admin)",
+      "description": "Admin moderation endpoints for reports, discussions, and broadcast notifications (Sprint 4 - Admin)",
+      "item": [
+        {
+          "name": "GET Moderation Reports",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/moderation/reports?status=pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "moderation", "reports"],
+              "query": [{ "key": "status", "value": "pending" }]
+            }
+          }
+        },
+        {
+          "name": "PATCH Resolve Report",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"resolved\",\n  \"resolutionNote\": \"Content reviewed and removed\",\n  \"deleteTarget\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/moderation/reports/{{reportId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "moderation", "reports", "{{reportId}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Lock Discussion (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/moderation/discussions/{{discussionId}}/lock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "moderation", "discussions", "{{discussionId}}", "lock"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Pin Discussion (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/moderation/discussions/{{discussionId}}/pin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "moderation", "discussions", "{{discussionId}}", "pin"]
+            }
+          }
+        },
+        {
+          "name": "POST Broadcast Notification (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Platform Update\",\n  \"message\": \"We've added new match center features with live scores and real-time updates!\",\n  \"type\": \"announcement\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/notifications/broadcast",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "notifications", "broadcast"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Admin Dashboard",
+      "description": "Admin dashboard, user management, company verification, and activity log endpoints",
+      "item": [
+        {
+          "name": "GET Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "dashboard", "stats"]
+            }
+          }
+        },
+        {
+          "name": "GET All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "// Auto-capture first user ID for admin operations",
+                  "if (json.success && json.data) {",
+                  "  var users = json.data.data || json.data;",
+                  "  if (users.length > 0 && users[0]._id) {",
+                  "    pm.collectionVariables.set('userId', users[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Search Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users?search=tanvir",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users"],
+              "query": [{ "key": "search", "value": "tanvir" }]
+            }
+          }
+        },
+        {
+          "name": "GET All Companies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "// Auto-capture first company ID for verification operations",
+                  "if (json.success && json.data) {",
+                  "  var companies = json.data.data || json.data;",
+                  "  if (companies.length > 0 && companies[0]._id) {",
+                  "    pm.collectionVariables.set('companyId', companies[0]._id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Pending Companies",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", "pending"]
+            }
+          }
+        },
+        {
+          "name": "GET Filter Companies by Status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies?status=verified",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies"],
+              "query": [{ "key": "status", "value": "verified" }]
+            }
+          }
+        },
+        {
+          "name": "GET Company Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/{{companyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", "{{companyId}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Approve Company",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"verified\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/{{companyId}}/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", "{{companyId}}", "verify"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Reject Company",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"rejected\",\n  \"rejectionReason\": \"Incomplete documentation. Please provide company registration certificate.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/{{companyId}}/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", "{{companyId}}", "verify"]
+            }
+          }
+        },
+        {
+          "name": "DELETE User",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "PATCH Toggle User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/{{userId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", "{{userId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "GET Activity Log",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/activity-log",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "activity-log"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📄 Content",
+      "description": "Content discovery and management endpoints",
+      "item": [
+        {
+          "name": "GET All Content",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/content?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "content"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Content by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/content/CONTENT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "content", "CONTENT_ID"]
+            }
+          }
+        },
+        {
+          "name": "GET Active Advertisements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/advertisements/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "advertisements", "active"]
+            }
+          }
+        },
+        {
+          "name": "GET Content Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/content/CONTENT_ID/reviews?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "content", "CONTENT_ID", "reviews"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Sports List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sports",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sports"]
+            }
+          }
+        },
+        {
+          "name": "GET Platforms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/platforms",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "platforms"]
+            }
+          }
+        },
+        {
+          "name": "GET Upcoming Content",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/company/upcoming?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "company", "upcoming"],
+              "query": [{ "key": "days", "value": "30" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

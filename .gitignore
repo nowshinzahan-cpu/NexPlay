@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.staging
+
+# Uploads
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Logs
+server/logs/*
+!server/logs/.gitkeep
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.pid
+*.seed
+
+# Python (if present)
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# Misc
+*.pid
+*.seed
